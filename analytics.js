@@ -141,19 +141,19 @@ const runReport = async () => {
   }
 };
 
-const job = schedule.scheduleJob("48 * * * *", () => {
-  (async () => {
-    try {
-      console.log("starting process at " + new Date());
-      const { transformedData, dimensions } = await runReport();
-      await populatePG(pgClient, transformedData, dimensions);
-      const exp = await exportPGToCSV(pgClient);
-      await fromPGToCSVToCloudStorage(exp, storage);
-      await createDataset(bigquery);
-      await createTable(bigquery);
-      await loadDataIntoBigQuery(bigquery, storage);
-    } catch (e) {
-      console.error("inital error", e);
-    }
-  })();
-});
+// const job = schedule.scheduleJob("48 * * * *", () => {
+(async () => {
+  try {
+    console.log("starting process at " + new Date());
+    const { transformedData, dimensions } = await runReport();
+    await populatePG(pgClient, transformedData, dimensions);
+    const exp = await exportPGToCSV(pgClient);
+    await fromPGToCSVToCloudStorage(exp, storage);
+    await createDataset(bigquery);
+    await createTable(bigquery);
+    await loadDataIntoBigQuery(bigquery, storage);
+  } catch (e) {
+    console.error("inital error", e);
+  }
+})();
+// });
